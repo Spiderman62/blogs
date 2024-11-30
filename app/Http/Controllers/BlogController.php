@@ -10,8 +10,9 @@ class BlogController extends Controller
 {
     private array $data = [];
 
-    public function category($id)
+    public function category(Request $request)
     {
+
         $this->data['blogs'] = Blog::select([
             'blogs.id',
             'blogs.name as blog_name',
@@ -21,13 +22,22 @@ class BlogController extends Controller
             'categories.name as category_name',
         ])
             ->join("categories", "categories.id", "=", "blogs.categories_id")
-            ->where(function ($query) use ($id) {
+            ->where(function ($query) use ($request) {
                 $query
                     ->where('blogs.status', '=', 1)
-                    ->where('blogs.categories_id', '=', $id);
+                    ->where('blogs.categories_id', '=', $request->route('id'));
             })
-            ->paginate(4);
-        $this->data['category_name'] = Categories::select('name')->where('id', '=', $id)->first()->name;
+            ->when($request->search, function ($query) use ($request) {
+                $query->where('blogs.name', 'like', '%' . $request->search . '%');
+            })
+            ->when($request->startDate && $request->endDate, function ($query) use ($request) {
+                $query->
+                whereDate('blogs.created_at', '>=', $request->startDate)
+                    ->whereDate('blogs.created_at', '<=', $request->endDate);
+
+            })
+            ->paginate(5)->withQueryString();
+        $this->data['category'] = Categories::select(['name', 'id'])->where('id', '=', $request->route('id'))->first();
         return inertia("Category", $this->data);
     }
 

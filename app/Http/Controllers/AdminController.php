@@ -82,7 +82,7 @@ class AdminController extends Controller
             ->where(function($query) {
                 $query->where('categories.status', '=', '1')
                     ->where('blogs.status', '=', '1');
-            })
+            })->orderBy("blogs.id", "desc")
             ->paginate(4);
         return inertia("Admin/Blog", $this->data);
     }
@@ -114,18 +114,21 @@ class AdminController extends Controller
         return inertia("Admin/EditBlog", $this->data);
     }
 
-    public function handleEditBlog(Request $request)
+    public function handleEditBlog(Request $request,Blog $blog)
     {
         $fields = $request->validate([
-            'id' => 'required|integer',
             'name' => 'required|string|max:255|min:3',
-            'image' => 'required|image|max:2048',
+            'image' => 'max:2048|nullable',
             'content' => 'required|string|min:10',
             'categories_id' => 'required|integer',
         ]);
-        $fields['image'] = Storage::disk('public')->put('blogs', $request->file('image'));
-        $fields['created_at'] = now();
-        Blog::where('id', '=', $fields['id'])->update($fields);
+        if($request->hasFile('image')){
+            $fields['image'] = Storage::disk('public')->put('blogs', $request->file('image'));
+            Storage::disk('public')->delete($blog->image);
+        }else{
+            $fields['image'] = $blog->image;
+        }
+        $blog->update($fields);
         return redirect()->route('adminBlog');
     }
     public function deleteBlog(Blog $blog){

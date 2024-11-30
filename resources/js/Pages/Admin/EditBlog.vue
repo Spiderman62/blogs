@@ -15,7 +15,6 @@ const props = defineProps({
     }
 })
 const form = useForm({
-    id:props.blog.id,
     name: props.blog.name,
     image: props.blog.image,
     preview: null,
@@ -23,7 +22,7 @@ const form = useForm({
     categories_id: props.blog.categories_id,
 })
 const submit = () => {
-    form.post(route('adminHandleEditBlog'));
+    form.post(route('adminHandleEditBlog',{id:props.blog.id}));
 }
 const chooseFile = e=>{
     if (form.preview) {

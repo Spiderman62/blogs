@@ -1,6 +1,11 @@
 <script setup>
+import {onMounted} from "vue";
+
 defineProps({
     blog: Object
+})
+onMounted(()=>{
+    window.scrollTo(0, 0);
 })
 </script>
 <template>

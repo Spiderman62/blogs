@@ -15,8 +15,8 @@
                         <label class="mr-1.5">Remember me</label>
                         <TextInput type="checkbox" class="mb-0" name="remember" v-model="form.remember"/>
                     </div>
-                    <p class="text-slate-600">Already a user?
-                        <Link :href="route('register')" class="text-link">Login</Link>
+                    <p class="text-slate-600">Forgot the password?
+                        <Link :href="route('password.request')" class="text-link">Click</Link>
                     </p>
                 </div>
                 <div>

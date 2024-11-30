@@ -37,7 +37,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'auth.user' => fn () => $request->user()
-                ? $request->user()->only('id', 'name', 'email')
+                ? $request->user()->only('id', 'name', 'email','avatar')
                 : null,
             'auth.categories' => Categories::select(['id','name'])->where('status','=',1)->get(),
         ]);

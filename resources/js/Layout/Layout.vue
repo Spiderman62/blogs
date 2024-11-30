@@ -20,6 +20,7 @@
                             <ul class="absolute bg-white text-black top-[100%] left-0 w-[200%] rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200">
                                 <Link
                                     v-for="category in $page.props.auth.categories"
+
                                     :key="category.id"
                                     class="p-4 cursor-pointer hover:bg-zinc-500 hover:text-white transition block"
                                     :href="route('category',{id: category.id})"
@@ -43,19 +44,27 @@
                     >CONTACT
                     </Link>
                 </nav>
-                <div class="space-x-6 text-zinc-600" v-if="$page.props.auth.user">
-                    <Link href="/"
+                <div class="space-x-6 text-zinc-600 flex items-center" v-if="$page.props.auth.user">
+                    <Link class="flex items-center" href="/"
                           as="button"
                           type="button">
-                        <font-awesome-icon class="cursor-pointer" :icon="['far', 'user']"/>
+                        <div class="h-16 w-16 rounded-full overflow-hidden mr-2">
+                            <img class="size-full object-cover" :src="`/storage/${$page.props.auth.user.avatar}`" alt="">
+                        </div>
                         {{ $page.props.auth.user.name }}
+                    </Link>
+                    <Link :href="route('profile')"
+                          as="button"
+                          type="button"
+                          method="get"
+                    >
+                        <span>Profile</span>
                     </Link>
                     <Link href="/logout"
                           as="button"
                           type="button"
                           method="post"
                     >
-
                         <span>Log out</span>
                     </Link>
                 </div>
