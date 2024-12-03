@@ -1,4 +1,4 @@
-<template>
+    <template>
     <div class="mb-6">
         <label>{{label}}</label>
         <input :class="{'!ring-red-500':message}" :type="type" v-model="model" />

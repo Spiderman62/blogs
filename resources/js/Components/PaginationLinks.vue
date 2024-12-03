@@ -26,6 +26,8 @@ const makeLabel = (label) => {
                        as="button"
                        type="button"
                        :href="link.url"
+                       preserve-scroll
+
                        v-html="makeLabel(link.label)"
                        class="border-x border-slate-50 w-12 h-12 grid place-items-center bg-white"
                        :class="{

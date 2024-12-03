@@ -44,6 +44,9 @@ class ProfileController extends Controller
 
     public function changeAvatar(Request $request)
     {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
         $user = Auth::user()->only(['avatar']);
         if ($request->hasFile('avatar')) {
             if ($user['avatar']) {

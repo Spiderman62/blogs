@@ -86,6 +86,7 @@ const setPassword = () => {
                         />
                     </div>
                 </div>
+                <p class="mt-4 text-red-500">{{formImage.errors.avatar}}</p>
                 <!-- End Upload Avatar -->
             </div>
             <div class="shadow p-4 rounded-lg bg-white py-6">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Route;
@@ -22,3 +23,4 @@ Route::middleware('auth')->group(function () {
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/admin.php';
 require_once __DIR__ . '/profile.php';
+require_once __DIR__ . '/comment.php';

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\Categories;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
@@ -51,6 +53,24 @@ class BlogController extends Controller
             'blogs.view',
             'categories.name as category_name',
         ])->join("categories", "categories.id", "=", "blogs.categories_id")->where('blogs.id', '=', $blog->id)->firstOrFail();
+        $comments = Comment::select([
+            'comments.id',
+            'comments.comment',
+            'comments.created_at',
+            'users.name',
+            'users.avatar',
+            'comments.user_id',
+        ])
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->where('comments.blog_id', '=', $blog->id)
+            ->orderby('comments.id', 'desc')
+            ->paginate(5);
+        $user = Auth::user();
+        foreach ($comments as $comment) {
+            $comment->action = Auth::check() ? Auth::user()->can('action',$comment) : null;
+        }
+        $this->data['comments'] = $comments;
+        $this->data['comment_status'] = session('comment_status');
         return inertia("BlogDetail", $this->data);
     }
 }

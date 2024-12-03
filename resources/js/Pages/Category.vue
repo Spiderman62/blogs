@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {debounce} from "lodash";
 import PaginationLinks from "../Components/PaginationLinks.vue";
 import {router} from "@inertiajs/vue3";
@@ -9,8 +9,6 @@ const props = defineProps({
     category: Object,
     search: String,
 })
-
-
 const search = ref(props.search);
 const category_id = ref(props.category.id);
 const startDate = reactive({
