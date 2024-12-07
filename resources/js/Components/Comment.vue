@@ -38,7 +38,7 @@ const getDate = date =>
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-x-3">
                 <div>
-                    <img class="h-12 w-12 rounded-full object-cover" :src="`/storage/${comment.avatar}`"
+                    <img class="h-12 w-12 rounded-full object-cover" :src=" comment.avatar ? `/storage/${comment.avatar}` : '/storage/test/default.jpg'"
                          alt="">
                 </div>
                 <div>

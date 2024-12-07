@@ -20,7 +20,7 @@ class AdminController extends Controller
 
     public function category()
     {
-        $this->data['categories'] = Categories::select(['categories.id', 'categories.name as category_name', 'users.name as user_name'])
+        $this->data['categories'] = Categories::select(['categories.id','categories.description', 'categories.name as category_name', 'users.name as user_name'])
             ->join("users", "users.id", "=", "categories.user_id")
             ->where('categories.status', '=', '1')
             ->get();
@@ -36,6 +36,7 @@ class AdminController extends Controller
     {
         $field = $request->validate([
             'name' => 'required|string|max:50|min:3|unique:categories',
+            'description' => 'required|string|max:50|min:3',
         ]);
         $field['user_id'] = Auth::user()->id;
         Categories::insert($field);
@@ -66,7 +67,7 @@ class AdminController extends Controller
         return redirect()->route('adminCategory');
     }
 
-    public function blog()
+    public function blog(Request $request)
     {
         $this->data['blogs'] = Blog::select([
             'blogs.id',
@@ -83,7 +84,11 @@ class AdminController extends Controller
                 $query->where('categories.status', '=', '1')
                     ->where('blogs.status', '=', '1');
             })->orderBy("blogs.id", "desc")
-            ->paginate(4);
+            ->when($request->search, function ($query, $search) {
+                $query->where('blogs.name', 'like', '%' . $search . '%');
+            })
+            ->paginate(4)->withQueryString();
+        $this->data['search'] = $request->search;
         return inertia("Admin/Blog", $this->data);
     }
 

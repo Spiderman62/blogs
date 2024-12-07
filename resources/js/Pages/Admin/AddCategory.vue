@@ -7,6 +7,7 @@ defineOptions({
 })
 const form = useForm({
     name: null,
+    description: null,
 })
 const submit = () => {
     form.post(route('adminHandleAddCategory'));
@@ -20,6 +21,13 @@ const submit = () => {
             label="Name category"
             :message="form.errors.name"
              v-model="form.name"/>
+            <div>
+                <label>Description</label>
+                <textarea
+                    :class="{'ring-red-500':form.errors.description}"
+                    class="resize-none mb-4" rows="4" v-model.trim="form.description"></textarea>
+                <p class="text-red-500 mb-4 text-xs">{{form.errors.description}}</p>
+            </div>
             <div>
                 <button class="bg-slate-500 w-full rounded py-1 text-white hover:bg-slate-600 transition">ADD</button>
             </div>

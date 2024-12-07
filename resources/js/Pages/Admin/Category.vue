@@ -25,6 +25,7 @@ defineProps({
                 <tr class="bg-slate-300">
                     <th>Id</th>
                     <th>name</th>
+                    <th>description</th>
                     <th>user</th>
                     <th>edit</th>
                     <th>delete</th>
@@ -35,6 +36,7 @@ defineProps({
                 <tr v-for="category in categories" :key="category.id">
                     <td>{{category.id}}</td>
                     <td>{{category.category_name}}</td>
+                    <td>{{category.description}}</td>
                     <td>{{category.user_name}}</td>
                     <td>
                         <Link class="text-green-600 text-[18px]" :href="route('adminEditCategory',{category: category.id})">

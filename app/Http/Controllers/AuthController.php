@@ -5,10 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Notifications\CustomEmailVerification;
 
 class AuthController extends Controller
 {
+    public function createLogin()
+    {
+        return inertia('Auth/Login', [
+            'success' => session('success'),
+            'invalidEmail' => session('invalidEmail'),
+            'message'=>session('message'),
+        ]);
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -17,11 +26,17 @@ class AuthController extends Controller
         ]);
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            if (Auth::user()->role) {
+            $user = Auth::user();
+            if (!$user->hasVerifiedEmail()) {
+                Auth::logout();
+                return back()->with('invalidEmail', 'You must verify your email address.');
+            }
+            if ($user->role) {
                 return redirect()->route('admin');
             }
             return redirect()->intended('/');
         }
+
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
@@ -34,12 +49,10 @@ class AuthController extends Controller
             'name' => 'required|min:3|max:30',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed',
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-//        $field['password'] = bcrypt($field['password']);
-        $field['avatar'] = Storage::disk('public')->put('avatars', $request->file('avatar'));
-        User::create($field);
-        return redirect()->route('login');
+        $user = User::create($field);
+        $user->notify(new CustomEmailVerification($user->id));
+        return redirect()->route('login')->with('success', 'You have been registered successfully, please verify your email.');
     }
 
     public function logout(Request $request)
@@ -48,5 +61,10 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('home');
+    }
+
+    public function confirm()
+    {
+
     }
 }

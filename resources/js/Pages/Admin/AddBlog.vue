@@ -19,13 +19,13 @@ const form = useForm({
 const submit = () => {
     form.post(route('adminHandleAddBlog'));
 }
-const chooseFile = e=>{
+const chooseFile = e => {
     if (form.preview) {
         URL.revokeObjectURL(form.preview);
     }
     let file = e.target.files[0];
     form.preview = file ? URL.createObjectURL(e.target.files[0]) : null;
-    form.image = file ??  null;
+    form.image = file ?? null;
 }
 </script>
 <template>
@@ -33,33 +33,33 @@ const chooseFile = e=>{
         <h1 class="text-center text-3xl font-bold mb-6">Add blog</h1>
         <form @submit.prevent="submit">
             <!-- Upload Avatar -->
-                        <div class="grid place-items-center">
-                            <div
-                                class="relative w-28 h-28 rounded-full overflow-hidden border border-slate-300"
-                            >
-                                <label for="avatar" class="absolute inset-0 grid content-end cursor-pointer">
-                                    <span class="bg-white/70 pb-2 text-center">Image</span>
-                                </label>
-                                <input type="file" @input="chooseFile" id="avatar" hidden/>
+            <div class="grid place-items-center">
+                <div
+                    class="relative w-28 h-28 rounded-full overflow-hidden border border-slate-300"
+                >
+                    <label for="avatar" class="absolute inset-0 grid content-end cursor-pointer">
+                        <span class="bg-white/70 pb-2 text-center">Image</span>
+                    </label>
+                    <input type="file" @input="chooseFile" id="avatar" hidden/>
 
-                                <img
-                                    class="object-cover w-28 h-28"
-                                    :src="form.preview ?? 'storage/test/default.jpg'"
-                                />
-                            </div>
+                    <img
+                        class="object-cover w-28 h-28"
+                        :src="form.preview ?? 'storage/test/default.jpg'"
+                    />
+                </div>
 
-                            <p class="error mt-2">{{ form.errors.image }}</p>
-                        </div>
+                <p class="error mt-2">{{ form.errors.image }}</p>
+            </div>
             <!-- End Upload Avatar -->
             <TextInput
                 label="Name blog"
                 :message="form.errors.name"
-                v-model="form.name"/>
-            <TextInput
-                label="Content blog"
-                :message="form.errors.content"
-                v-model="form.content"/>
-
+                v-model.trim="form.name"/>
+            <div class="mb-4">
+                <label>Content</label>
+                <textarea v-model.trim="form.content" class="resize-none" rows="5"></textarea>
+                <p class="mt-2 text-red-400">{{form.errors.content}}</p>
+            </div>
 
             <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Select an
                 option</label>
@@ -72,7 +72,9 @@ const chooseFile = e=>{
             </select>
             <p class="error mt-2">{{ form.errors.categories_id }}</p>
             <div>
-                <button class="bg-slate-500 w-full rounded py-1 text-white hover:bg-slate-600 transition" :disabled="form.processing">ADD</button>
+                <button class="bg-slate-500 w-full rounded py-1 text-white hover:bg-slate-600 transition"
+                        :disabled="form.processing">ADD
+                </button>
             </div>
         </form>
     </div>

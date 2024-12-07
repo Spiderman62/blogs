@@ -34,7 +34,7 @@ const url = computed(() => {
     if (formImage.preview) {
         getImage = formImage.preview;
     } else {
-        getImage = `/storage/${formImage.avatar}`;
+        getImage = formImage.avatar ? `/storage/${formImage.avatar}` : '/storage/test/default.jpg';
     }
     return getImage;
 })

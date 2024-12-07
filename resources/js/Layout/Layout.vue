@@ -49,7 +49,7 @@
                           as="button"
                           type="button">
                         <div class="h-16 w-16 rounded-full overflow-hidden mr-2">
-                            <img class="size-full object-cover" :src="`/storage/${$page.props.auth.user.avatar}`" alt="">
+                            <img class="size-full object-cover" :src=" $page.props.auth.user.avatar ? `/storage/${$page.props.auth.user.avatar}` : '/storage/test/default.jpg'" alt="">
                         </div>
                         {{ $page.props.auth.user.name }}
                     </Link>
