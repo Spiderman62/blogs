@@ -10,7 +10,8 @@ const props = defineProps({
 })
 const form = useForm({
     id:props.category.id,
-    name: props.category.name
+    name: props.category.name,
+    description:props.category.description,
 })
 const submit = () => {
     form.patch(route('adminHandleEditCategory'));
@@ -24,6 +25,11 @@ const submit = () => {
                 label="Name category"
                 :message="form.errors.name"
                 v-model="form.name"/>
+            <div class="mb-4">
+                <label>Content</label>
+                <textarea v-model.trim="form.description" class="resize-none" rows="5"></textarea>
+                <p class="mt-2 text-red-400">{{form.errors.description}}</p>
+            </div>
             <div>
                 <button class="bg-slate-500 w-full rounded py-1 text-white hover:bg-slate-600 transition">ADD</button>
             </div>

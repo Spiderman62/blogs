@@ -8,6 +8,7 @@ use App\Models\Categories;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -53,10 +54,12 @@ class AdminController extends Controller
     {
         $fields = $request->validate([
             'id' => 'required|integer|exists:categories,id',
-            'name' => 'required|string|max:50|min:3|unique:categories',
+            'name' => ['required', 'string', 'max:50', 'min:3',Rule::unique(Categories::class)->ignore($request->id)],
+            'description'=>'required|string|max:255|min:3',
         ]);
         Categories::where('id', '=', $fields['id'])->update([
             'name' => $fields['name'],
+            'description' => $fields['description'],
         ]);
         return redirect()->route('adminCategory');
     }

@@ -70,10 +70,15 @@ const url = computed(()=>{
                 label="Name blog"
                 :message="form.errors.name"
                 v-model="form.name"/>
-            <TextInput
-                label="Content blog"
-                :message="form.errors.content"
-                v-model="form.content"/>
+<!--            <TextInput-->
+<!--                label="Content blog"-->
+<!--                :message="form.errors.content"-->
+<!--                v-model="form.content"/>-->
+            <div class="mb-4">
+                <label>Content</label>
+                <textarea v-model.trim="form.content" class="resize-none" rows="5"></textarea>
+                <p class="mt-2 text-red-400">{{form.errors.content}}</p>
+            </div>
             <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Select an
                 option</label>
             <select
